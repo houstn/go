@@ -7,14 +7,14 @@ import (
 )
 
 type Houstn struct {
-	options Options
+	options *Options
 	ticker  *time.Ticker
 	stop    chan bool
 	client  *http.Client
 }
 
 type Options struct {
-	Interval     int
+	Interval     time.Duration
 	Application  string
 	Environment  string
 	Organisation string
@@ -23,14 +23,14 @@ type Options struct {
 	Token        string
 }
 
-func New(options Options) *Houstn {
+func New(options *Options) *Houstn {
 	if options.Url == "" {
 		options.Url = "https://hello.houstn.io"
 	}
 
 	return &Houstn{
 		options: options,
-		ticker:  time.NewTicker(time.Duration(options.Interval) * time.Second),
+		ticker:  time.NewTicker(options.Interval),
 		stop:    make(chan bool),
 		client:  &http.Client{},
 	}
