@@ -14,13 +14,13 @@ type Houstn struct {
 }
 
 type Options struct {
-	Interval     time.Duration
-	Application  string
-	Environment  string
-	Organisation string
-	Deployment   string
-	Url          string
-	Token        string
+	Interval    time.Duration
+	Project     string
+	Application string
+	Environment string
+	Deployment  string
+	Url         string
+	ApiKey      string
 }
 
 func New(options *Options) *Houstn {

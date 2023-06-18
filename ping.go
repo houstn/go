@@ -2,17 +2,13 @@ package houstn
 
 import (
 	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
 )
 
 func (h *Houstn) Ping(metadata any) {
-	username := fmt.Sprintf("%s+%s+%s", h.options.Organisation, h.options.Application, h.options.Environment)
-	auth := fmt.Sprintf("%s:%s", username, h.options.Token)
-
-	authorization := base64.StdEncoding.EncodeToString([]byte(auth))
+	path := fmt.Sprintf("%s/%s/%s", h.options.Project, h.options.Application, h.options.Environment)
 
 	body, err := json.Marshal(metadata)
 
@@ -21,14 +17,14 @@ func (h *Houstn) Ping(metadata any) {
 		return
 	}
 
-	request, err := http.NewRequest("POST", h.options.Url, bytes.NewBuffer(body))
+	request, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", h.options.Url, path), bytes.NewBuffer(body))
 
 	if err != nil {
 		fmt.Printf("Error creating heartbeat request: %s\n", err)
 		return
 	}
 
-	request.Header.Set("Authorization", fmt.Sprintf("Basic %s", authorization))
+	request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", h.options.ApiKey))
 	request.Header.Set("X-Houstn-Deployment", h.options.Deployment)
 	request.Header.Set("X-Houstn-Environment", h.options.Environment)
 	request.Header.Set("X-Houstn-Application", h.options.Application)
