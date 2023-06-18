@@ -24,10 +24,6 @@ type Options struct {
 }
 
 func New(options *Options) *Houstn {
-	if options.Url == "" {
-		options.Url = "https://hello.houstn.io"
-	}
-
 	return &Houstn{
 		options: options,
 		stop:    make(chan bool),
@@ -65,6 +61,11 @@ func GetOptions(options *Options) *Options {
 
 	if options.ApiKey = ConfigValue(options.ApiKey, "HOUSTN_API_KEY", ""); options.ApiKey == "" {
 		fmt.Println("HOUSTN_API_KEY is required")
+		return nil
+	}
+
+	if options.Url = ConfigValue(options.Url, "HOUSTN_URL", "https://hello.houstn.io"); options.Url == "" {
+		fmt.Println("HOUSTN_URL is required")
 		return nil
 	}
 
