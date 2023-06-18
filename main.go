@@ -72,13 +72,15 @@ func GetOptions(options *Options) *Options {
 }
 
 func (h *Houstn) Start(metadata any) {
-	if h.options == nil {
+	options := GetOptions(h.options)
+
+	if options == nil {
 		fmt.Println("Valid options are required")
 		return
 	}
 
 	go func() {
-		ticker := time.NewTicker(h.options.Interval)
+		ticker := time.NewTicker(options.Interval)
 
 		fmt.Println("Houstn started")
 		defer fmt.Println("Houstn stopped")
